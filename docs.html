@@ -1,0 +1,184 @@
+﻿<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>BerryJS Docs</title>
+    <link rel="stylesheet" href="css/site.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍓</text></svg>">
+</head>
+<body>
+    <a class="skip" href="#content">Skip to content</a>
+    <div class="wrap">
+        <header>
+            <a class="brand" href="index.html">BerryJS</a>
+            <nav>
+                <a href="docs.html">Docs</a>
+                <a data-link="github">GitHub</a>
+                <a data-link="npm">npm</a>
+                <button type="button" class="theme" aria-label="Switch to light mode"></button>
+            </nav>
+        </header>
+        <main id="content" class="docs">
+            <h1>Docs</h1>
+            <p class="lede">These are the real BerryJS pieces. A game does not have to use all of them.</p>
+            <p class="contents">
+                <a href="#start">Start</a>
+                <a href="#game">Game</a>
+                <a href="#actor">Actor</a>
+                <a href="#camera">Camera</a>
+                <a href="#sprite">Sprites</a>
+                <a href="#overlap">Overlap</a>
+            </p>
+
+            <h2 id="start">Getting started</h2>
+            <div class="code-window">
+                <div class="code-bar">
+                    <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                    <span class="code-name">terminal</span>
+                    <button type="button" class="copy-code">Copy code</button>
+                </div>
+                <pre><code>npm create berryjs my-game
+cd my-game
+npm install
+npm run dev</code></pre>
+            </div>
+            <p>Edit scenes/GameScene.js. Pictures go in public/assets so dev and build can both find them.</p>
+            <p>Until npm is live, clone the engine and run npx vite. Inside that repo, import from src/index.js, not from "berryjs".</p>
+
+            <h2>Installation</h2>
+            <p>npm install berryjs only downloads the engine. npm create berryjs creates the game folder.</p>
+            <div class="code-window">
+                <div class="code-bar">
+                    <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                    <span class="code-name">main.js</span>
+                    <button type="button" class="copy-code">Copy code</button>
+                </div>
+                <pre><code>import { Game, Scene, Actor, Sprite, loadImage, Sound } from "berryjs"</code></pre>
+            </div>
+
+            <h2 id="game">Game</h2>
+            <p>Game owns the canvas, the loop, the keyboard, and the camera. fullscreen: true uses the window size. remove waits until the update finishes, so the next actor is not skipped.</p>
+            <div class="code-window">
+                <div class="code-bar">
+                    <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                    <span class="code-name">main.js</span>
+                    <button type="button" class="copy-code">Copy code</button>
+                </div>
+                <pre><code>const game = new Game({
+    width: 800,
+    height: 600,
+    fullscreen: false,
+    background: "#111111"
+})
+
+game.setScene(scene)
+game.start()</code></pre>
+            </div>
+
+            <h2>Scene</h2>
+            <p>start can be async. update gets delta time in seconds. draw is for text such as a score. end runs when the scene is left.</p>
+            <div class="code-window">
+                <div class="code-bar">
+                    <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                    <span class="code-name">MenuScene.js</span>
+                    <button type="button" class="copy-code">Copy code</button>
+                </div>
+                <pre><code>export class MenuScene extends Scene {
+    update() {
+        if (this.game.keyboard.isDown("Enter")) {
+            this.game.setScene(this.game.gameScene)
+        }
+    }
+
+    draw(ctx) {
+        ctx.fillStyle = "white"
+        ctx.fillText("Press Enter", 80, 80)
+    }
+}</code></pre>
+            </div>
+
+            <h2 id="actor">Actor</h2>
+            <p>An actor is a box. color draws a rectangle when there is no sprite. oneWay still needs solid, and it only blocks a landing from above. grounded becomes true on that landing.</p>
+            <div class="code-window">
+                <div class="code-bar">
+                    <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                    <span class="code-name">GameScene.js</span>
+                    <button type="button" class="copy-code">Copy code</button>
+                </div>
+                <pre><code>const floor = new Actor(0, 420, 800, 48)
+floor.solid = true
+floor.color = "#3ddc84"
+
+const ledge = new Actor(200, 280, 160, 16)
+ledge.solid = true
+ledge.oneWay = true
+
+if (this.grounded && this.game.keyboard.isDown("Space")) {
+    this.vy = -420
+    this.grounded = false
+}</code></pre>
+            </div>
+            <p>Key codes are ArrowLeft, ArrowRight, Space, ShiftLeft, and ShiftRight. There is no key named Shift.</p>
+
+            <h2 id="camera">Camera</h2>
+            <div class="code-window">
+                <div class="code-bar">
+                    <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                    <span class="code-name">GameScene.js</span>
+                    <button type="button" class="copy-code">Copy code</button>
+                </div>
+                <pre><code>this.game.camera.follow(player)
+this.game.camera.setBounds(0, 0, 1600, 600)
+this.game.camera.follow(null)</code></pre>
+            </div>
+            <p>follow(null) is the fixed camera. null in setBounds means that side does not stop the camera. On a fullscreen game, place the floor from game.height, not from a fixed 500.</p>
+
+            <h2 id="sprite">Sprites</h2>
+            <div class="code-window">
+                <div class="code-bar">
+                    <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                    <span class="code-name">GameScene.js</span>
+                    <button type="button" class="copy-code">Copy code</button>
+                </div>
+                <pre><code>const image = await loadImage("/assets/player-sheet.png")
+player.setSprite(new Sprite(image, image.width / 5, image.height / 4))
+player.sprite.setAnimation(1, 5)
+player.flipX = true</code></pre>
+            </div>
+            <p>setAnimation(row, frameCount, start) picks a row. start is the first column and defaults to 0. The same call again does not restart the row. flipX mirrors the picture.</p>
+
+            <h2 id="overlap">Overlap, tags, and sound</h2>
+            <div class="code-window">
+                <div class="code-bar">
+                    <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                    <span class="code-name">Player.js</span>
+                    <button type="button" class="copy-code">Copy code</button>
+                </div>
+                <pre><code>coin.tag = "coin"
+
+onOverlap(other) {
+    if (other.tag !== "coin") return
+    this.score += 1
+    this.game.remove(other)
+}
+
+const jump = new Sound("/sounds/jump.wav")
+jump.play()</code></pre>
+            </div>
+            <p>onOverlap also sees the floor for that frame, so check the tag. Score is your own variable. The engine does not play a sound unless you call play.</p>
+        </main>
+        <footer>
+            <span>BerryJS</span>
+            <nav>
+                <a href="index.html">Home</a>
+                <a data-link="npm">npm</a>
+                <a data-link="author">Piyush</a>
+                <a data-link="github">GitHub</a>
+            </nav>
+        </footer>
+    </div>
+    <script src="js/config.js"></script>
+    <script src="js/site.js"></script>
+</body>
+</html>

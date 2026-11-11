@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>BerryJS</title>
+    <link rel="stylesheet" href="css/site.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍓</text></svg>">
+</head>
+<body>
+    <a class="skip" href="#content">Skip to content</a>
+    <div class="wrap">
+        <header>
+            <a class="brand" href="index.html">BerryJS</a>
+            <nav>
+                <a href="docs.html">Docs</a>
+                <a data-link="github">GitHub</a>
+                <a data-link="npm">npm</a>
+                <button type="button" class="theme" aria-label="Switch to light mode"></button>
+            </nav>
+        </header>
+        <main id="content">
+            <section class="hero">
+                <div>
+                    <h1>BerryJS</h1>
+                    <p class="lede">A small 2D game engine for the browser. Scenes, actors, keyboard, collision, and a camera. You write the game.</p>
+                    <div class="install">
+                        <code>npm create berryjs my-game</code>
+                        <button type="button" data-copy="npm create berryjs my-game">Copy</button>
+                    </div>
+                    <p class="note">That creates a game folder. Until the package is on npm, clone the engine and run npx vite.</p>
+                </div>
+                <div class="preview" role="img" aria-label="The example game, with a player, a coin, and a green floor">
+                  <img src="https://raw.githubusercontent.com/PiyuSX/BerryJs/main/docs/demo.png" alt="Game preview" width="530">
+                </div>
+            </section>
+            <section>
+                <h2>The example</h2>
+                <p>Enter starts the platformer. Arrows move, Shift runs, Space jumps, and Escape returns to the menu.</p>
+                <a class="button" href="docs.html">Read the docs</a>
+            </section>
+            <section>
+                <h2>What the engine actually has</h2>
+                <ul class="features">
+                    <li>Game loop and delta time</li>
+                    <li>Scenes with start, update, draw, and end</li>
+                    <li>Actors, sprites, and colored boxes</li>
+                    <li>Keyboard input by key code</li>
+                    <li>Solid collision, gravity, and one-way platforms</li>
+                    <li>Camera follow, bounds, or a fixed camera</li>
+                    <li>Overlap checks and tags</li>
+                    <li>Safe actor removal and optional sound</li>
+                </ul>
+            </section>
+            <section>
+                <h2>Quick start</h2>
+                <p>Create a simple platformer using BerryJS.</p>
+                <div class="code-window">
+                    <div class="code-bar">
+                        <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                        <span class="code-name">main.js</span>
+                        <button type="button" class="copy-code">Copy code</button>
+                    </div>
+                    <pre><code>import { Game, Scene, Actor } from "berryjs"
+
+class Player extends Actor {
+    update(dt) {
+        if (this.game.keyboard.isDown("ArrowRight")) {
+            this.x += 200 * dt
+        }
+
+        if (this.grounded && this.game.keyboard.isDown("Space")) {
+            this.vy = -420
+            this.grounded = false
+        }
+    }
+}
+
+class GameScene extends Scene {
+    start() {
+        const player = new Player(80, 100, 32, 32)
+        player.color = "#e23d5a"
+        player.gravity = 900
+        this.add(player)
+
+        const floor = new Actor(0, 420, 800, 48)
+        floor.solid = true
+        floor.color = "#3ddc84"
+        this.add(floor)
+    }
+}
+
+const game = new Game({ width: 800, height: 480 })
+game.setScene(new GameScene())
+game.start()</code></pre>
+                </div>
+            </section>
+        </main>
+        <footer>
+            <span>BerryJS</span>
+            <nav>
+                <a href="docs.html">Docs</a>
+                <a data-link="github">GitHub</a>
+                <a data-link="npm">npm</a>
+                <a data-link="author">Piyush</a>
+            </nav>
+        </footer>
+    </div>
+    <script src="js/config.js"></script>
+    <script src="js/site.js"></script>
+</body>
+</html>
