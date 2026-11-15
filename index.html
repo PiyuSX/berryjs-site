@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="BerryJS is a small 2D game engine for the browser: scenes, actors, keyboard, collision and a camera.">
     <title>BerryJS</title>
     <link rel="stylesheet" href="css/site.css">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍓</text></svg>">
@@ -28,10 +29,10 @@
                         <code>npm create berryjs my-game</code>
                         <button type="button" data-copy="npm create berryjs my-game">Copy</button>
                     </div>
-                    <p class="note">That creates a game folder. Until the package is on npm, clone the engine and run npx vite.</p>
+                    <p class="note">That creates a game folder. Then run <code>cd my-game</code>, <code>npm install</code> and <code>npm run dev</code>.</p>
                 </div>
-                <div class="preview" role="img" aria-label="The example game, with a player, a coin, and a green floor">
-                  <img src="https://raw.githubusercontent.com/PiyuSX/BerryJs/main/docs/demo.png" alt="Game preview" width="530">
+                <div class="preview">
+                  <img src="https://raw.githubusercontent.com/PiyuSX/BerryJs/main/docs/demo.png" alt="The BerryJS example platformer, with a player, coins and a green floor" width="530" height="280">
                 </div>
             </section>
             <section>
@@ -61,7 +62,7 @@
                         <span class="code-name">main.js</span>
                         <button type="button" class="copy-code">Copy code</button>
                     </div>
-                    <pre><code>import { Game, Scene, Actor } from "berryjs"
+                    <pre><code>import { Game, Scene, Actor } from "berryjs-engine"
 
 class Player extends Actor {
     update(dt) {
